@@ -89,37 +89,37 @@ const AGENT_DEFS = [
     id:0, name:'SAGE', color:'#7c4dff', sigil:'🧙', accent:'#b39ddb',
     tasks:['Analyze arcane patterns','Compile spell index','Review enchantment logs','Predict ley line shifts','Optimize mana flow'],
     emotes:['📚','✨','🔮','💭','⚗️'],
-    home:{x:0.15, y:0.76}
+    home:{x:0.13, y:0.84}
   },
   {
     id:1, name:'ELEN', color:'#00c853', sigil:'🌿', accent:'#a5d6a7',
     tasks:['Brew healing potions','Catalog herb specimens','Tend the mushroom grove','Distill essence vials','Map root networks'],
     emotes:['🌿','🍄','💚','🌱','✿'],
-    home:{x:0.72, y:0.74}
+    home:{x:0.30, y:0.86}
   },
   {
     id:2, name:'MAX', color:'#ff6d00', sigil:'⚙️', accent:'#ffcc80',
     tasks:['Repair alchemy bench','Calibrate pressure gauges','Forge new tools','Test combustion ratios','Maintain the forge'],
     emotes:['⚙️','🔧','💥','🛠️','⚡'],
-    home:{x:0.86, y:0.72}
+    home:{x:0.64, y:0.84}
   },
   {
     id:3, name:'MYRA', color:'#e91e63', sigil:'🔮', accent:'#f48fb1',
     tasks:['Read crystal visions','Chart star positions','Decode omen scrolls','Commune with spirits','Scry distant realms'],
     emotes:['🔮','⭐','💫','🌙','👁️'],
-    home:{x:0.38, y:0.78}
+    home:{x:0.44, y:0.88}
   },
   {
     id:4, name:'REX', color:'#b71c1c', sigil:'⚔️', accent:'#ef9a9a',
     tasks:['Guard the sanctum gate','Patrol perimeter','Sharpen weapons','Train combat forms','Log threat reports'],
     emotes:['⚔️','🛡️','💪','🔥','👊'],
-    home:{x:0.60, y:0.76}
+    home:{x:0.55, y:0.85}
   }
 ];
 
 // Bar counter is at floor level in the actual tavern image (~y=0.65)
-const BAR_POS = {x:0.50, y:0.65};
-const RUNE_POS = {x:0.50, y:0.73};
+const BAR_POS = {x:0.50, y:0.70};
+const RUNE_POS = {x:0.50, y:0.76};
 const RUNE_R = 60;
 
 // 4-frame synthetic walk bob: rest, up, rest, down
@@ -686,8 +686,8 @@ function updateAgents(dt){
               a.nextState=STATES.DRINKING;
               a.nextTimer=2000+Math.random()*2000;
             } else {
-              a.tx=Math.max(30,Math.min(W-30,W*(a.homeX+(Math.random()-0.5)*0.15)));
-              a.ty=Math.max(H*0.62,Math.min(H*0.90,H*(a.homeY+(Math.random()-0.5)*0.08)));
+              a.tx=Math.max(W*0.08,Math.min(W*0.72,W*(a.homeX+(Math.random()-0.5)*0.12)));
+              a.ty=Math.max(H*0.70,Math.min(H*0.93,H*(a.homeY+(Math.random()-0.5)*0.08)));
               a.nextState=STATES.WORKING;
             }
           }
@@ -702,16 +702,16 @@ function updateAgents(dt){
         }
         case STATES.DRINKING:{
           a.state=STATES.WALKING;
-          a.tx=Math.max(30,Math.min(W-30,W*(a.homeX+(Math.random()-0.5)*0.1)));
-          a.ty=Math.max(H*0.62,Math.min(H*0.90,H*(a.homeY+(Math.random()-0.5)*0.06)));
+          a.tx=Math.max(W*0.08,Math.min(W*0.72,W*(a.homeX+(Math.random()-0.5)*0.08)));
+          a.ty=Math.max(H*0.70,Math.min(H*0.93,H*(a.homeY+(Math.random()-0.5)*0.06)));
           a.nextState=STATES.WORKING;
           a.stateTimer=3000+Math.random()*3000;
           break;
         }
         case STATES.CHATTING:{
           a.state=STATES.WALKING;
-          a.tx=Math.max(30,Math.min(W-30,W*(a.homeX+(Math.random()-0.5)*0.1)));
-          a.ty=Math.max(H*0.62,Math.min(H*0.90,H*(a.homeY+(Math.random()-0.5)*0.06)));
+          a.tx=Math.max(W*0.08,Math.min(W*0.72,W*(a.homeX+(Math.random()-0.5)*0.08)));
+          a.ty=Math.max(H*0.70,Math.min(H*0.93,H*(a.homeY+(Math.random()-0.5)*0.06)));
           a.nextState=STATES.WORKING;
           a.stateTimer=3000+Math.random()*2000;
           a.chatTarget=null;
@@ -784,7 +784,7 @@ canvas.addEventListener('pointermove',e=>{
   const r=canvas.getBoundingClientRect();
   const px=e.clientX-r.left, py=e.clientY-r.top;
   agents[dragAgent].x=Math.max(20,Math.min(W-20,px+dragOffX));
-  agents[dragAgent].y=Math.max(H*0.60,Math.min(H*0.92,py+dragOffY));
+  agents[dragAgent].y=Math.max(H*0.68,Math.min(H*0.94,py+dragOffY));
 });
 
 canvas.addEventListener('pointerup',e=>{
