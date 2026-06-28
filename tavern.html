@@ -85,31 +85,31 @@ const AGENT_DEFS = [
     id:0, name:'SAGE', color:'#7c4dff', sigil:'🧙', accent:'#b39ddb',
     tasks:['Analyze arcane patterns','Compile spell index','Review enchantment logs','Predict ley line shifts','Optimize mana flow'],
     emotes:['📚','✨','🔮','💭','⚗️'],
-    home:{x:0.18, y:0.45}
+    home:{x:0.18, y:0.75}
   },
   {
     id:1, name:'ELEN', color:'#00c853', sigil:'🌿', accent:'#a5d6a7',
     tasks:['Brew healing potions','Catalog herb specimens','Tend the mushroom grove','Distill essence vials','Map root networks'],
     emotes:['🌿','🍄','💚','🌱','✿'],
-    home:{x:0.72, y:0.55}
+    home:{x:0.78, y:0.72}
   },
   {
     id:2, name:'MAX', color:'#ff6d00', sigil:'⚙️', accent:'#ffcc80',
     tasks:['Repair alchemy bench','Calibrate pressure gauges','Forge new tools','Test combustion ratios','Maintain the forge'],
     emotes:['⚙️','🔧','💥','🛠️','⚡'],
-    home:{x:0.82, y:0.48}
+    home:{x:0.88, y:0.70}
   },
   {
     id:3, name:'MYRA', color:'#e91e63', sigil:'🔮', accent:'#f48fb1',
     tasks:['Read crystal visions','Chart star positions','Decode omen scrolls','Commune with spirits','Scry distant realms'],
     emotes:['🔮','⭐','💫','🌙','👁️'],
-    home:{x:0.35, y:0.42}
+    home:{x:0.42, y:0.78}
   },
   {
     id:4, name:'REX', color:'#b71c1c', sigil:'⚔️', accent:'#ef9a9a',
     tasks:['Guard the sanctum gate','Patrol perimeter','Sharpen weapons','Train combat forms','Log threat reports'],
     emotes:['⚔️','🛡️','💪','🔥','👊'],
-    home:{x:0.58, y:0.50}
+    home:{x:0.62, y:0.76}
   }
 ];
 
@@ -609,36 +609,25 @@ function drawAgentPixel(agent, t){
   // Floor aura
   ctx.save();
   ctx.globalCompositeOperation='lighter';
-  ctx.globalAlpha=0.18;
-  const aGrad=ctx.createRadialGradient(x,y+2,0,x,y+2,60);
+  ctx.globalAlpha=0.15;
+  const aGrad=ctx.createRadialGradient(x,y,0,x,y,55);
   aGrad.addColorStop(0,col);
   aGrad.addColorStop(1,'rgba(0,0,0,0)');
   ctx.fillStyle=aGrad;
   ctx.beginPath();
-  ctx.ellipse(x,y+2,60,20,0,0,Math.PI*2);
+  ctx.ellipse(x,y,55,18,0,0,Math.PI*2);
   ctx.fill();
   ctx.restore();
 
-  // Dark halo
-  ctx.save();
-  ctx.globalAlpha=0.4;
-  const hGrad=ctx.createRadialGradient(x,yy-45,0,x,yy-45,32);
-  hGrad.addColorStop(0,'rgba(0,0,0,0.8)');
-  hGrad.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=hGrad;
-  ctx.beginPath(); ctx.arc(x,yy-45,32,0,Math.PI*2); ctx.fill();
-  ctx.restore();
-
   if(agent.sprite){
-    // Use sprite image — draw feet at (x, yy), centered horizontally
+    // Real sprite — draw feet at yy, centered on x
     const sw = agent.sprite.width;
     const sh = agent.sprite.height;
-    // Target height ~90px, maintain aspect
-    const dh = 90;
+    const dh = 100;
     const dw = Math.round(sw * dh / sh);
     ctx.save();
-    ctx.filter=`brightness(1.1) contrast(1.1) saturate(1.3)`;
-    ctx.shadowColor=col; ctx.shadowBlur=10;
+    ctx.filter=`brightness(1.1) contrast(1.05) saturate(1.2)`;
+    ctx.shadowColor=col; ctx.shadowBlur=14;
     if(agent.dir===-1){
       ctx.translate(x + dw/2, yy);
       ctx.scale(-1,1);
@@ -648,58 +637,44 @@ function drawAgentPixel(agent, t){
     }
     ctx.restore();
   } else {
-    // Procedural pixel sprite per agent
+    // Procedural fallback
     ctx.save();
-    ctx.filter=`brightness(1.05) saturate(1.2)`;
     ctx.shadowColor=col; ctx.shadowBlur=12;
     if(agent.dir===-1){ ctx.translate(x*2,0); ctx.scale(-1,1); }
     drawProceduralAgent(agent, x, yy);
     ctx.restore();
-  }
-
-  // Rim glow outline
-  ctx.save();
-  ctx.globalAlpha=0.7;
-  ctx.shadowColor=col; ctx.shadowBlur=8;
-  ctx.strokeStyle=col; ctx.lineWidth=1.5;
-  ctx.beginPath();
-  ctx.arc(x,yy-45,22,0,Math.PI*2);
-  ctx.stroke();
-  ctx.restore();
-
-  // 4-dir black outline
-  [[-1,0],[1,0],[0,-1],[0,1]].forEach(([dx,dy])=>{
+    // Rim circle only for procedural
     ctx.save();
-    ctx.globalAlpha=0.4;
-    ctx.fillStyle='#000';
+    ctx.globalAlpha=0.6;
+    ctx.strokeStyle=col; ctx.lineWidth=1.5;
     ctx.beginPath();
-    ctx.arc(x+dx,yy-45+dy,22,0,Math.PI*2);
-    ctx.fill();
+    ctx.arc(x,yy-45,22,0,Math.PI*2);
+    ctx.stroke();
     ctx.restore();
-  });
+  }
 
   // Emote bubble
   const emote=agent.emotes[agent.emoteIdx];
   ctx.save();
-  ctx.globalAlpha=0.9;
-  ctx.fillStyle='rgba(10,6,8,0.8)';
+  ctx.globalAlpha=0.88;
+  ctx.fillStyle='rgba(10,6,8,0.82)';
   ctx.beginPath();
-  ctx.roundRect(x-14,yy-104,28,22,4);
+  ctx.roundRect(x-14,yy-116,28,22,4);
   ctx.fill();
   ctx.font='14px serif';
   ctx.textAlign='center';
   ctx.textBaseline='middle';
-  ctx.fillText(emote,x,yy-93);
+  ctx.fillText(emote,x,yy-105);
   ctx.restore();
 
   // Name tag
   ctx.save();
   ctx.font='900 10px Cinzel,serif';
   ctx.textAlign='center';
-  ctx.fillStyle='rgba(0,0,0,0.7)';
-  ctx.fillText(agent.name,x+1,yy-110+1);
+  ctx.fillStyle='rgba(0,0,0,0.8)';
+  ctx.fillText(agent.name,x+1,yy-122+1);
   ctx.fillStyle=acc;
-  ctx.fillText(agent.name,x,yy-110);
+  ctx.fillText(agent.name,x,yy-122);
   ctx.restore();
 }
 
@@ -859,7 +834,7 @@ function updateAgents(dt){
               a.tx=W*(a.homeX+(Math.random()-0.5)*0.15);
               a.ty=H*(a.homeY+(Math.random()-0.5)*0.08);
               a.tx=Math.max(30,Math.min(W-30,a.tx));
-              a.ty=Math.max(H*0.25,Math.min(H*0.85,a.ty));
+              a.ty=Math.max(H*0.60,Math.min(H*0.88,a.ty));
               a.nextState=STATES.WORKING;
             }
           }
@@ -882,7 +857,7 @@ function updateAgents(dt){
           a.tx=W*(a.homeX+(Math.random()-0.5)*0.1);
           a.ty=H*(a.homeY+(Math.random()-0.5)*0.06);
           a.tx=Math.max(30,Math.min(W-30,a.tx));
-          a.ty=Math.max(H*0.25,Math.min(H*0.85,a.ty));
+          a.ty=Math.max(H*0.60,Math.min(H*0.88,a.ty));
           a.nextState=STATES.WORKING;
           a.stateTimer=3000+Math.random()*3000;
           break;
@@ -976,7 +951,7 @@ canvas.addEventListener('pointermove',e=>{
   const rect=canvas.getBoundingClientRect();
   const px=e.clientX-rect.left, py=e.clientY-rect.top;
   agents[dragAgent].x=Math.max(20,Math.min(W-20,px+dragOffX));
-  agents[dragAgent].y=Math.max(H*0.2,Math.min(H-20,py+dragOffY));
+  agents[dragAgent].y=Math.max(H*0.60,Math.min(H*0.90,py+dragOffY));
 });
 
 canvas.addEventListener('pointerup',e=>{
