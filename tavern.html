@@ -475,8 +475,9 @@ function drawFire(t){
     ctx.globalAlpha=a*0.9;
     ctx.globalCompositeOperation='lighter';
     ctx.fillStyle=`hsl(${30+a*30},100%,${50+a*30}%)`;
+    const er=Math.max(0.01,e.size*a);
     ctx.beginPath();
-    ctx.arc(e.x,e.y,e.size*a,0,Math.PI*2);
+    ctx.arc(e.x,e.y,er,0,Math.PI*2);
     ctx.fill();
     ctx.restore();
   });
@@ -589,8 +590,9 @@ function drawForge(t){
     ctx.globalCompositeOperation='lighter';
     ctx.globalAlpha=a;
     ctx.fillStyle=`hsl(${30+a*30},100%,${60+a*30}%)`;
+    const pr=Math.max(0.01,2*a);
     ctx.beginPath();
-    ctx.arc(p.x,p.y,2*a,0,Math.PI*2);
+    ctx.arc(p.x,p.y,pr,0,Math.PI*2);
     ctx.fill();
     ctx.restore();
   }
