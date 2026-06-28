@@ -529,7 +529,7 @@ function drawAgentPixel(agent, t){
 
   if(agent.sprite){
     const sw=agent.sprite.width, sh=agent.sprite.height;
-    const dh=130;
+    const dh=200;
     const dw=Math.round(sw*dh/sh);
 
     ctx.save();
@@ -582,7 +582,7 @@ function drawAgentPixel(agent, t){
 
   // Emote bubble (adjusted position for larger sprite)
   const emote=agent.emotes[agent.emoteIdx];
-  const bubbleY=yy-(agent.sprite?148:116);
+  const bubbleY=yy-(agent.sprite?218:116);
   ctx.save();
   ctx.globalAlpha=0.88;
   ctx.fillStyle='rgba(10,6,8,0.82)';
@@ -760,7 +760,7 @@ let dashAgent=null;
 function hitAgent(px,py){
   for(let i=agents.length-1;i>=0;i--){
     const a=agents[i];
-    const dx=px-a.x, dy=py-(a.y-55);
+    const dx=px-a.x, dy=py-(a.y-90);
     if(Math.sqrt(dx*dx+dy*dy)<38) return i;
   }
   return -1;
